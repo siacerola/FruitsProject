@@ -1,64 +1,63 @@
-const { MongoClient } = require('mongodb')
-const assert = require('assert')
+const mongoose = require("mongoose")
 
 // Replace the uri string with your MongoDB deployment's connection string.
-const uri = "mongodb://127.0.0.1:27017";
+const uri = "mongodb://127.0.0.1:27017/fruitsDB";
+
+mongoose.connect(uri)
+console.log("mongoDB connected");
+
+const fruitSchema = new mongoose.Schema({
+  name: String,
+  rating: Number,
+  review: String
+})
+
+const Fruit = mongoose.model("Fruit", fruitSchema)
+
+const fruit = new Fruit({
+  name: "apple",
+  rating: 7,
+  review:"pretty solid as a fruit"
+}) 
+
+const peopleSchema = new mongoose.Schema({
+  name: String,
+  age:Number
+})
+
+const People = mongoose.model("People", peopleSchema)
+
+const people = new People({
+  name: "john",
+  age:37
+})
+
+// people.save()
+
+// fruit.save()
+
+const kiwi = new Fruit({
+  name: "kiwi",
+  rating: 10,
+  review:"the best fruit!"
+})
+
+const orange = new Fruit({
+  name: "orange",
+  rating: 4,
+  review:"ttoo sour for me"
+})
+
+const banana = new Fruit({
+  name: "banana",
+  rating: 3,
+  review:"weird texture"
+})
+
+Fruit.insertMany([kiwi, orange, banana], {ordered:true})
 
 
 
-
-
-// Connection URI
-// Create a new MongoClient
-const client = new MongoClient(uri);
-
-const database = client.db('fruitsDB')
-const fruits = database.collection("fruits")
-
-async function connectDatabase() {
-  try {
-    // Connect the client to the server (optional starting in v4.7)
-    await client.connect();
-    // Establish and verify connection
-    await client.db(database).command({ ping: 1 });
-    console.log("Connected successfully to server");
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
-  }
-}
-
-async function insertDocuments() {
-  try {
-    // Connect the client to the server (optional starting in v4.7)
-    
-    const docs = [
-      {
-        name  : "apple",
-        score: 8,
-        review:"great fruit"
-      },
-      {
-        name  : "orange",
-        score: 6,
-        review:"kinda sour"
-      },
-      {
-        name  : "banana",
-        score: 9,
-        review:"great stuff"
-      }
-    ]
-
-    const options = { ordered: true }
-    
-    const result = await fruits.insertMany(docs, options)
-    console.log(`${result.insertedCount} documents were inserted`);
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
-  }
-}
 
 async function findAllDocuments() {
   try {
@@ -70,4 +69,4 @@ async function findAllDocuments() {
   }
 }
 
-findAllDocuments().catch(console.dir);
+// findAllDocuments().catch(console.dir);
