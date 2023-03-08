@@ -54,19 +54,29 @@ const banana = new Fruit({
   review:"weird texture"
 })
 
-Fruit.insertMany([kiwi, orange, banana], {ordered:true})
+// Fruit.insertMany([kiwi, orange, banana], {ordered:true})
 
+// console.log(People.find({name:"orange"}));
 
+const carSchema = new mongoose.Schema({
+  name: String,
+  brand:String
+})
 
+const Car = mongoose.model('cars', carSchema)
 
-async function findAllDocuments() {
-  try {
-    const cursor = fruits.find({})
-    const allValues = await cursor.toArray()
-    console.log(allValues);
-  } finally {
-    await client.close();
-  }
+const avanza = new Car({
+  name: "avanza",
+  brand:"toyota"
+})
+
+async function finder() {
+  const query = await Fruit.find({})
+  query.forEach((element) => {
+    console.log(element.name);
+  })
+  console.log("monogDB close");
+  mongoose.connection.close()
 }
+finder()
 
-// findAllDocuments().catch(console.dir);
