@@ -7,7 +7,10 @@ mongoose.connect(uri)
 console.log("mongoDB connected");
 
 const fruitSchema = new mongoose.Schema({
-  name: String,
+  name: {
+    type: String,
+    required:[true,"please check your data entry, no name specified!"]
+  },
   rating: Number,
   review: String
 })
@@ -16,7 +19,11 @@ const Fruit = mongoose.model("Fruit", fruitSchema)
 
 const fruit = new Fruit({
   name: "apple",
-  rating: 7,
+  rating: {
+    type: Number,
+    min: 1,
+    max:10
+  },
   review:"pretty solid as a fruit"
 }) 
 
@@ -54,21 +61,11 @@ const banana = new Fruit({
   review:"weird texture"
 })
 
-// Fruit.insertMany([kiwi, orange, banana], {ordered:true})
-
-// console.log(People.find({name:"orange"}));
-
-const carSchema = new mongoose.Schema({
-  name: String,
-  brand:String
+const melon = new Fruit({
+  rating: 5,
+  review:"the best fruit!"
 })
 
-const Car = mongoose.model('cars', carSchema)
-
-const avanza = new Car({
-  name: "avanza",
-  brand:"toyota"
-})
 
 async function finder() {
   const query = await Fruit.find({})
@@ -78,5 +75,16 @@ async function finder() {
   console.log("monogDB close");
   mongoose.connection.close()
 }
+
+async function update() {
+  const res = await Fruit.updateOne
+    ({ _id: "64095fb77f9b46d7b6186a64" }, { name: "melon" })
+}
+
+async function deleteOne() {
+  await Fruit.deleteOne({rating:34})
+}
+// update()
+// deleteOne()
 finder()
 
