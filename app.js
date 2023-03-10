@@ -29,15 +29,24 @@ const fruit = new Fruit({
 
 const peopleSchema = new mongoose.Schema({
   name: String,
-  age:Number
+  age: Number,
+  favouriteFruit:fruitSchema
 })
 
 const People = mongoose.model("People", peopleSchema)
 
-const people = new People({
-  name: "john",
-  age:37
-})
+
+// pineapple.save()
+
+
+
+// const Amy = new People({
+//   name: "amy",
+//   age: 12,
+//   favouriteFruit: pineapple
+// })
+
+// Amy.save()
 
 // people.save()
 
@@ -66,6 +75,34 @@ const melon = new Fruit({
   review:"the best fruit!"
 })
 
+const pineapple = new Fruit({
+  name: "pineapple",
+  rating: 10,
+  review:"great fruit"
+})
+
+const mango = new Fruit({
+  name: "mango",
+  rating: 6,
+  review:"great fruit"
+})
+
+mango.save()
+
+const Amy = new People({
+  name: "amy",
+  age: 12,
+  favouriteFruit: pineapple
+})
+
+const john = new People({
+  name: "john",
+  age: 37
+  // favouriteFruit: pineapple
+})
+
+// john.save()
+
 
 async function finder() {
   const query = await Fruit.find({})
@@ -77,14 +114,16 @@ async function finder() {
 }
 
 async function update() {
-  const res = await Fruit.updateOne
-    ({ _id: "64095fb77f9b46d7b6186a64" }, { name: "melon" })
+  const res = await People.updateOne(
+    { name: "john" },
+    { favouriteFruit: mango })
+  console.log("update success");
 }
 
 async function deleteOne() {
   await Fruit.deleteOne({rating:34})
 }
-// update()
+update()
 // deleteOne()
 finder()
 
